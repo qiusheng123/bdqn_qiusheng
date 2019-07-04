@@ -76,6 +76,7 @@ public class Demo01_orderinfMgr3 {
 							System.out.println("您的输入有误，请输入10~20之间的整数！");
 								time=input.nextInt();
 						}
+						//送餐地址
 						System.out.println("请输入送餐地址：");
 						String address=input.next();  
 						
@@ -93,16 +94,16 @@ public class Demo01_orderinfMgr3 {
 						addresses[j]=address;
 						sumPrices[j]=sumPrice;
 						 break;
-					}
-					   if(!isAdd) {
-						   System.out.println("对不起，您的餐袋已满");
-					   }			 
+					}					 			 
 				 }
+					  if(!isAdd) {
+						   System.out.println("对不起，您的餐袋已满");
+					   }
 				 break;
 			case 2:	
 				 //查看餐带
 				 System.out.println("***查看餐带***");
-				 System.out.println("序号\t订餐人\t餐品信息\t\t送餐时间\t送餐地址\t\t总金额\t订单状态");
+				 System.out.println("序号\t订餐人\t餐品信息\t\t送餐时间\t送餐地址\t总金额\t订单状态");
 				 for (int i = 0; i < names.length; i++) {
 					if (names[i]!=null) {
 						String state=(states[i]==0)?"已预订":"已完成";
