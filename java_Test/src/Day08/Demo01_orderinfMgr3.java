@@ -43,112 +43,25 @@ public class Demo01_orderinfMgr3 {
 			 */
 			switch (choose) {
 			case 1:
-				 //我要订餐				
-				 System.out.println("***我要订餐***");
-				 boolean isAdd=false;//记录餐带是否为空
-				 //显示菜品
-				 for(int j=0;j<names.length;j++) {
-					 if(names[j]==null) {//找到第一个空位置，可以添加订单
-						 isAdd=true;//置标志位，可以订餐
-						 System.out.println("序号"+"\t"+"菜名"+"\t"+"单价"+"\t"+"点赞数");
-						 for(int i=0;i<dishNames.length;i++) {
-							 String pri=prices[i]+"元";
-							 String praiseNum=praiseNums[i]>0?(praiseNums[i]+"赞"):"0";
-							 System.out.println((i+1)+"\t"+dishNames[i]+"\t"+pri+"\t"+praiseNum);
-						 }
-						 
-						 //用户选择菜品
-						 System.out.print("请输入订餐人姓名：");
-						 String name=input.next();
-						 System.out.print("请选择需要的菜品编码：");
-						 int chooseDish=input.nextInt();
-						 System.out.print("请选择您需要的份数：");
-						 int number=input.nextInt();
-						String dishMeg= dishNames[chooseDish-1]+""+number+"份";
-						double sumPrice=prices[chooseDish-1]*number;
-						
-						//餐费满50元，免送餐费5元
-						double deliCharge=(sumPrice>=50)?0:5;
-						
-						System.out.println("请输入送餐时间（送餐时间是10点到20点间整点送餐）：");
-						int time=input.nextInt();
-						while(time<10||time>20) {
-							System.out.println("您的输入有误，请输入10~20之间的整数！");
-								time=input.nextInt();
-						}
-						//送餐地址
-						System.out.println("请输入送餐地址：");
-						String address=input.next();  
-						
-						//无需添加状态，默认为0，即已预订状态
-						System.out.println("订餐成功！");
-						System.out.println("您订的是："+dishMeg);
-						System.out.println("送餐时间："+time+"点");
-						System.out.println("餐费："+sumPrice+"元，送餐费"+deliCharge+"元，总计："
-						+(sumPrice+deliCharge)+"元");
-						
-						//添加数据
-						names[j]=name;
-						dishMegs[j]=dishMeg;
-						times[j]=time;
-						addresses[j]=address;
-						sumPrices[j]=sumPrice;
-						 break;
-					}					 			 
-				 }
-					  if(!isAdd) {
-						   System.out.println("对不起，您的餐袋已满");
-					   }
-				 break;
+				dingDish(names,dishNames,prices,praiseNums,times,dishMegs,addresses,sumPrices);
+				break;
 			case 2:	
-				 //查看餐带
-				 System.out.println("***查看餐带***");
-				 System.out.println("序号\t订餐人\t餐品信息\t\t送餐时间\t送餐地址\t总金额\t订单状态");
-				 for (int i = 0; i < names.length; i++) {
-					if (names[i]!=null) {
-						String state=(states[i]==0)?"已预订":"已完成";
-						String date=times[i]+"点";
-						String sumPrice=sumPrices[i]+"元";
-						System.out.println((i+1)+"\t"+names[i]+"\t"+dishMegs[i]
-								+"\t"+date+"\t"+addresses[i]+"\t"+sumPrices[i]+"\t"+state);
-					}
-				}
-				 break;
+				dishBag( names, states, sumPrices, times, dishMegs,addresses);
+				break;
 			case 3:	
-				 //签收订单
-				 System.out.println("***签收订单***");
-				 boolean isSingFind=false;//找到要签收的订单
-				 System.out.println("请悬着要签收的订单序号：");
-				 int singOrderId=input.nextInt();
-				 for (int i = 0; i < names.length; i++) {
-					//状态为预订，序号为用户输入的订单序号减1：可签收
-					//状态为已完成，序号为用户输入的订单号减1，不可签收
-					 if (names[i]!=null&&states[i]==0&&singOrderId==i+1) {
-						states[i]=1;//订将状态值置为已完成
-						System.out.println("订单签收成功！");
-						isSingFind=true;//标记已找到此订单
-					}else if(names[i]!=null&&states[i]==1&&singOrderId==i+1) {
-						System.out.println("您选择的订单已完成签收，不能再次签收！");
-						isSingFind=true;//标记已找到此订单
-					}
-				}
-				 //未找到的订单序号：不可签收你
-				 if (!isSingFind) {
-					System.out.println("您选择的订单不存在！");
-				}
+				signOrder( names,states) ;
 				 break;
 			case 4:
-				 //删除订单
-				 System.out.println("***删除订单***");
+				 deleteOrder(names, times, dishMegs, addresses, sumPrices, states);
 				 break;
 			case 5:
-				 //我要点赞
-				 System.out.println("***我要点赞***");
+				dianZan(dishNames, sumPrices, praiseNums);
 				 break;
 			case 6: //退出订餐	
 			default://功能编号录入错误，认为退出系统
 				 System.out.println("***退出订餐***");
 				 isExit=true;
+				 input.close();//关闭键盘录入
 				 break;
 			}
 			
@@ -157,9 +70,170 @@ public class Demo01_orderinfMgr3 {
 				System.out.print("输入0返回主菜单");
 				num=input.nextInt();
 			}else {//结束循环
+				input.close();//关闭键盘录入
 				break;
 			}
 		}while(num==0);
 	}
-
+	//case 1
+	public static void dingDish(String names[],String dishNames[],double prices[],
+			int praiseNums[],int times[],String dishMegs[],String addresses[],
+			double sumPrices[]){
+		Scanner input=new Scanner(System.in);
+		 //我要订餐				
+		 System.out.println("***我要订餐***");
+		 boolean isAdd=false;//记录餐带是否为空
+		 //显示菜品
+		 for(int j=0;j<names.length;j++) {
+			 if(names[j]==null) {//找到第一个空位置，可以添加订单
+				 isAdd=true;//置标志位，可以订餐
+				 System.out.println("序号"+"\t"+"菜名"+"\t"+"单价"+"\t"+"点赞数");
+				 for(int i=0;i<dishNames.length;i++) {
+					 String pri=prices[i]+"元";
+					 String praiseNum=praiseNums[i]>0?(praiseNums[i]+"赞"):"0";
+					 System.out.println((i+1)+"\t"+dishNames[i]+"\t"+pri+"\t"+praiseNum);
+				 }
+				 
+				 //用户选择菜品
+				 System.out.print("请输入订餐人姓名：");
+				 String name=input.next();
+				 System.out.print("请选择需要的菜品编码：");
+				 int chooseDish=input.nextInt();
+				 System.out.print("请选择您需要的份数：");
+				 int number=input.nextInt();
+				String dishMeg= dishNames[chooseDish-1]+""+number+"份";
+				double sumPrice=prices[chooseDish-1]*number;
+				
+				//餐费满50元，免送餐费5元
+				double deliCharge=(sumPrice>=50)?0:5;
+				
+				System.out.println("请输入送餐时间（送餐时间是10点到20点间整点送餐）：");
+				int time=input.nextInt();
+				while(time<10||time>20) {
+					System.out.println("您的输入有误，请输入10~20之间的整数！");
+						time=input.nextInt();
+				}
+				//送餐地址
+				System.out.println("请输入送餐地址：");
+				String address=input.next();  
+				
+				//无需添加状态，默认为0，即已预订状态
+				System.out.println("订餐成功！");
+				System.out.println("您订的是："+dishMeg);
+				System.out.println("送餐时间："+time+"点");
+				System.out.println("餐费："+sumPrice+"元，送餐费"+deliCharge+"元，总计："
+				+(sumPrice+deliCharge)+"元");
+				
+				//添加数据
+				names[j]=name;
+				dishMegs[j]=dishMeg;
+				times[j]=time;
+				addresses[j]=address;
+				sumPrices[j]=sumPrice;
+				 break;
+			}					 			 
+		 }
+			  if(!isAdd) {
+				   System.out.println("对不起，您的餐袋已满");
+			   }			  
+	}
+	//case 2
+	public static void dishBag(String names[],int states[],double sumPrices[],int times[],String dishMegs[],String addresses[]){	
+		 //查看餐带
+		 System.out.println("***查看餐带***");
+		 System.out.println("序号\t订餐人\t餐品信息\t\t送餐时间\t送餐地址\t总金额\t订单状态");
+		 for (int i = 0; i < names.length; i++) {
+			if (names[i]!=null) {
+				String state=(states[i]==0)?"已预订":"已完成";
+				String date=times[i]+"点";
+				String sumPrice=sumPrices[i]+"元";
+				System.out.println((i+1)+"\t"+names[i]+"\t"+dishMegs[i]
+						+"\t"+date+"\t"+addresses[i]+"\t"+sumPrices[i]+"\t"+state);
+			}
+		}		
+	}
+	//case 3
+	public  static void signOrder(String names[],int states[]) {
+		Scanner input=new Scanner(System.in);
+		 //签收订单
+		 System.out.println("***签收订单***");
+		 boolean isSingFind=false;//找到要签收的订单
+		 System.out.println("请悬着要签收的订单序号：");
+		 int singOrderId=input.nextInt();
+		 for (int i = 0; i < names.length; i++) {
+			//状态为预订，序号为用户输入的订单序号减1：可签收
+			//状态为已完成，序号为用户输入的订单号减1，不可签收
+			 if (names[i]!=null&&states[i]==0&&singOrderId==i+1) {
+				states[i]=1;//订将状态值置为已完成
+				System.out.println("订单签收成功！");
+				isSingFind=true;//标记已找到此订单
+			}else if(names[i]!=null&&states[i]==1&&singOrderId==i+1) {
+				System.out.println("您选择的订单已完成签收，不能再次签收！");
+				isSingFind=true;//标记已找到此订单
+			}
+		}
+		 //未找到的订单序号：不可签收你
+		 if (!isSingFind) {
+			System.out.println("您选择的订单不存在！");
+		}
+	}
+	//case4
+	public static void deleteOrder(String names[],int times[],
+			String dishMegs[],String addresses[],double sumPrices[],int states[]) {
+		Scanner input=new Scanner(System.in);
+		//删除订单
+		 System.out.println("***删除订单***");
+		 boolean isDelFind=false;//标记是否找到删除的订单
+		 System.out.println("请输入要删除的订单号：");
+		 int intdelID=input.nextInt();
+		 for (int i = 0; i < names.length; i++) {
+			//状态值为完成，序号值为用户输入的序号减1：可删除
+			//状态值为已预订，序号值为用户输入的序号减1：不可删除 
+			 if (names[i]!=null&&states[i]==1&&intdelID==i+1) {
+				isDelFind=true;//标记已找到此订单
+				for (int j =intdelID-1 ; j < names.length-1; j++) {
+					names[j]=names[j+1];
+					dishMegs[j]=dishMegs[j+1];
+					times[j]=times[j+1];
+					addresses[j]=addresses[j+1];
+					sumPrices[j]=sumPrices[j+1];
+					states[j]=states[j+1];							
+				}	
+					//最后一位清空
+					names[names.length-1]=null;
+					dishMegs[dishMegs.length-1]=null;
+					times[times.length-1]=0;
+					addresses[addresses.length-1]=null;
+					sumPrices[sumPrices.length-1]=0;
+					states[states.length-1]=0;
+					System.out.println("删除订单成功！");	
+					break;
+			}else if (names[i]!=null&&states[i]==0&&intdelID==i+1) {
+				System.out.println("您选择的订单未签收，不能删除！");
+				isDelFind=true;//标记已找到此订单
+			}
+		}
+		 //未找到该序号的订单：不能删除
+		 if (!isDelFind) {
+			System.out.println("您要的删除的订单不存在！ ");  
+		}
+	}
+	//case5
+	public static void dianZan(String dishNames[],double prices[],int praiseNums[]) {
+		 Scanner input=new Scanner(System.in);
+		 //我要点赞
+		 System.out.println("***我要点赞***");
+		 //显示菜品信息
+		 System.out.println("序号"+"\t"+"菜名"+"\t"+"单价");
+		 for (int i = 0; i < dishNames.length; i++) {
+			String price=prices[i]+"元";
+			String priaiseNum=praiseNums[i]>0?(praiseNums[i]+"赞"):"";
+			System.out.println((i+1)+"\t"+dishNames[i]+"\t"+price+"\t"
+			+priaiseNum);
+		}
+		 System.out.println("请选择您要点赞的菜品序号：");
+		 int priaiseNum=input.nextInt();
+		 praiseNums[priaiseNum-1]++;//点赞数+1
+		 System.out.println("点赞成功");
+	}
 }
