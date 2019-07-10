@@ -18,7 +18,7 @@ public class Test_05 {
 		System.out.println("ÇëÊäÈëÄúµÄÃÜÂë£º");
 		user1[1]=input.next();
 		boolean a=Arrays.equals(user, user1);
-		
+	
 		if (a) {
 			System.out.println("ÇëÊäÈëĞÂÃÜÂë£º");
 			user[1]=input.next();

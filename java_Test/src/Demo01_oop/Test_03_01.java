@@ -7,15 +7,15 @@ public class Test_03_01 {
 		xw.name="小王";
 		xw.age=25;
 		xw.sex="男";
-		xw.num=01;
-		System.out.println(xw.name+"  "+xw.age+"岁   "+"性别："+xw.sex+"  "+"学号："+xw.num);
+		xw.classNo=01;
+		xw.show1(xw.name,xw.age,xw.sex,xw.classNo);
 		
 		Test_03 xh=new Test_03();
 		xh.name="小红";
 		xh.age=25;
 		xh.sex="女";
-		xh.num=02;
-		System.out.println(xh.name+"  "+xh.age+"岁   "+"性别："+xh.sex+"  "+"学号："+xh.num);
+		xh.classNo=02;
+		xh.show2();
 	}
 
 }
