@@ -19,25 +19,37 @@ public class test08 {
 	}
 	
 	public String SystemTime() {//获取当前系统时间。 
+		//1970年0时到现在的时间
 		Date date=new Date(System.currentTimeMillis());
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd/hh/mm/ss");
 		return sdf.format(date);
 	}
 	
 	public int getSum(int x) {//1到整数x的求和
-		int sum=0;
-		for (int i = 1; i <=x ; i++) {
-			sum+=i;
+//		int sum=0;
+//		for (int i = 1; i <=x ; i++) {
+//			sum+=i;
+//		}
+//		return sum;
+		//递归
+		if(x==1) {
+			return 1;
+		}else {
+			return x+getSum(x-1);
 		}
-		return sum;
 	}
 	
 	public int getProduct(int x) {//整数x的阶乘
-		int sum=1;
-		for (int i = 1; i <=x ; i++) {
-			sum*=i;
+//		int sum=1;
+//		for (int i = 1; i <=x ; i++) {
+//			sum*=i;
+//		}
+//		return sum;
+		if (x==1) {
+			return 1;
+		}else {
+			return x*getProduct(x-1);
 		}
-		return sum;
 	}
 	public static void main(String[] args) {
 		test08 test=new test08();

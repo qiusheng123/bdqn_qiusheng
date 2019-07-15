@@ -86,7 +86,7 @@ public class Test09_wall {
 			System.out.println();
 		}
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		image_0 image=new image_0();
 		image.x=5;
 		image.y=5;
