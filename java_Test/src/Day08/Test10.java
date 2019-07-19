@@ -4,19 +4,21 @@ package Day08;
  */
 public class Test10 {
 	
-	public  int eatPeach(int time, int peach) {
-		if (time==1) {
-			return peach;
-		}else {
-			time--;
-			peach=(peach+1)*2;
-			return eatPeach(time, peach);
+	public  int eatPeach(int day) {
+		   if (day == 10)
+	        {
+	            return 1;
+	        }
+	        else
+	        {
+	            return (eatPeach(day + 1) + 1) * 2;
+
 		}
 	}
 	
 	public static void main(String[] args) {
 		Test10 eat=new Test10();
-		int count=eat.eatPeach(10,1);
+		int count=eat.eatPeach(1);
 		System.out.println("第一天猴子摘了"+count+"个桃子");
 	}
 	
