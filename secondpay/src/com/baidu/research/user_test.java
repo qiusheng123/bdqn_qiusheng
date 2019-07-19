@@ -17,7 +17,7 @@ public class user_test {
 		 * 方法结束时，栈桢消失。
 		 * 
 		 */
-
+	
 	}
 
 
