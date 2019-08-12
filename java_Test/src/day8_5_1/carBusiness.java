@@ -10,4 +10,26 @@ public class carBusiness {
 				new Carriage("别克",300,"京NT37465","林荫大道"),
 				new Carriage("别克",600,"京NT96968","GL8")};
 	
-}
+	public Car carChoose(String brand,String type,int seatCount) {
+		Car moto=null;
+		//遍历汽车数组,根据用户输入的品种、型号、座位数、返回具有那辆的车
+		for (Car mymoto:cars) {
+			//通过instanceof区分数组元素是轿车还是客车
+			if (mymoto instanceof Car) {
+				Car car=(Car)mymoto;
+				if (car.getBrand().equals(brand)&&((Carriage) car).getType().equals(type)) {
+					moto=car;
+					break;
+				}
+			}else {
+				Bus bus=(Bus)mymoto;
+				if (bus.getBrand().equals(brand)&&bus.getSeatNum()==seatCount) {
+					moto=bus;
+					break;
+				}
+			}
+		}
+		return moto;
+	}
+		
+	}

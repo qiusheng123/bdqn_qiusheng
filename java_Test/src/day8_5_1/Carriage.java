@@ -6,6 +6,12 @@ public class Carriage extends Car {
 	public Carriage() {
 		
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public Carriage(String brand, double rent, String carNo,String type) {
 		super(brand, rent, carNo);
 		this.type=type;
